@@ -6,7 +6,7 @@ from data_structures.queue import Queue
 from ordersheet import Ordersheet
 
 # 예시 데이터
-ready_list = []  # 준비완료 리스트
+ready_list =  Queue()  # 준비완료 리스트
 pending_list = Queue()  # 준비중 리스트
 cart = {} 
 order_number = 100
@@ -22,12 +22,9 @@ second_window.title("상품 처리 화면")
 second_window.geometry("700x800")
 
 # 왼쪽: 주문 목록 표시 영역
-left_frame = tk.Frame(second_window, bg="white", relief="solid", borderwidth=1, width=200)
-left_frame.pack(side="left", fill="y")
-left_frame.pack_propagate(False)  # 프레임 크기 고정
-
-# 왼쪽 주문 목록 제목
-tk.Label(left_frame, text="주문 목록", font=("Arial", 20), bg="white").pack(pady=10)
+second_left_frame = tk.Frame(second_window, bg="white", relief="solid", borderwidth=1, width=200)
+second_left_frame.pack(side="left", fill="y")
+second_left_frame.pack_propagate(False)
 
 # 오른쪽: 주문 상세 표시 영역
 right_frame = tk.Frame(second_window, bg="white", relief="solid", borderwidth=1, width=400)
@@ -48,25 +45,113 @@ bottom_frame = tk.Frame(right_frame, bg="white", relief="solid", borderwidth=1, 
 bottom_frame.pack(fill="x")
 bottom_frame.pack_propagate(False)
 
-# 예제: 각 프레임에 Label 추가 (필요에 따라 내용 업데이트)
-tk.Label(top_frame, text="주문 번호", font=("Arial", 36), bg="white").pack(expand=True)
-tk.Label(middle_frame, text="주문 내역", font=("Arial", 24), bg="white").pack(pady=10)
-
-
-
 # 주문 처리 버튼
 tk.Button(
-    bottom_frame, 
-    text="주문 처리", 
-    font=("Arial", 20), 
-    bg="#4CAF50", 
-    fg="black", 
+    bottom_frame,
+    text="주문 처리",
+    font=("Arial", 18),
+    bg="#4CAF50",
+    fg="black",
     command=lambda: process_order()
 ).pack(pady=10, padx=20, expand=True)
 
 def process_order():
-    """주문 처리 로직 (추후 구현 예정)"""
-    pass  # 현재는 구현 없음
+    """주문 처리: Queue에서 제거 후 ready_list에 추가"""
+    if not pending_list.is_empty():
+        # 가장 앞의 Ordersheet를 Queue에서 제거
+        completed_order = pending_list.dequeue()
+        
+        # 완료된 주문을 ready_list에 추가
+        ready_list.enqueue(completed_order)
+        
+        # UI 업데이트
+        update_second_display()
+        update_pending_display()
+        update_ready_display()
+    else:
+        messagebox.showinfo("알림", "처리할 주문이 없습니다.")
+
+def update_second_display():
+    """좌측 주문 목록, 우측 주문 정보 업데이트"""
+    # 좌측 주문 목록 업데이트
+    for widget in second_left_frame.winfo_children():
+        if isinstance(widget, tk.Label):
+            widget.destroy()
+    
+    # 주문 목록 제목
+    tk.Label(second_left_frame, text="주문 목록", font=("Arial", 20), bg="white").pack(pady=10)
+
+    
+    # 주문 목록 표시 (오름차순)
+    if not pending_list.is_empty():
+        print(f"Queue size: {pending_list.size}")
+    
+        current = pending_list.clist.head
+        for _ in range(pending_list.size):
+            print(f"Order ID: {current.value.get_id()}")
+            order_id = current.value.get_id()
+            print(current.value.get_id())
+            
+            # 현재 작업 중인 주문 강조
+            if current == pending_list.clist.head:  # 가장 앞의 주문
+                tk.Label(
+                    second_left_frame,
+                    text=f"{order_id}",
+                    font=("Arial", 24, "bold"),  # Bold 처리
+                    bg="white",
+                    fg="blue",  # 파란색
+                    anchor="w"
+                ).pack()
+            else:
+                tk.Label(
+                    second_left_frame,
+                    text=f"{order_id}",
+                    font=("Arial", 24),
+                    bg="white",
+                    fg="black",  # 파란색
+                    anchor="w"
+                ).pack()
+
+            current = current.next_node  # 다음 노드로 이동
+    else:
+        tk.Label(second_left_frame, text="대기 중인 주문이 없습니다.", font=("Arial", 16), bg="white").pack(pady=10)
+
+
+    # 우측 주문 정보 업데이트
+    for widget in top_frame.winfo_children():
+        widget.destroy()
+    for widget in middle_frame.winfo_children():
+        widget.destroy()
+
+    if not pending_list.is_empty():
+        # 상단: 주문 번호 표시
+        current_order = pending_list.clist.head.value
+        tk.Label(
+            top_frame,
+            text=f"주문 번호: {current_order.get_id()}",
+            font=("Arial", 48),
+            bg="white"
+        ).pack(expand=True)
+
+        # 중단: 주문 내역 표시
+        for item in current_order.get_items():
+            product_name = item["product_name"]
+            quantity = item["quantity"]
+            tk.Label(
+                middle_frame,
+                text=f"{product_name} x {quantity}개",
+                font=("Arial", 24),
+                bg="white",
+                anchor="w"
+            ).pack(pady=5, padx=10, fill="x")
+    else:
+        # 주문 정보가 없을 때
+        tk.Label(
+            top_frame,
+            text="대기 중인 주문 없음",
+            font=("Arial", 24),
+            bg="white"
+        ).pack(expand=True)
 
 
 products = {
@@ -92,10 +177,23 @@ def update_ready_display():
     """준비완료 영역 업데이트"""
     for widget in upper_frame.winfo_children():
         if isinstance(widget, tk.Label) and widget.cget("text") != "준비완료":
-            widget.destroy()  # 기존 준비완료 리스트 제거
+            widget.destroy()
+    ready_numbers = []
+    if not ready_list.is_empty():
+        current = ready_list.clist.head
+        for _ in range(ready_list.size):
+            ready_numbers.append(current.value.get_id())  # Ordersheet의 order_id 가져오기
+            current = current.next_node  # 다음 노드로 이동
 
-    ready_numbers = ", ".join(map(str, ready_list))  # 리스트를 문자열로 변환
-    tk.Label(upper_frame, text=ready_numbers, font=("Arial", 20), anchor="w", bg="white").pack(pady=10, padx=10, fill="x")
+    # 문자열로 변환하여 표시
+    ready_numbers_str = ", ".join(map(str, ready_numbers))
+    tk.Label(
+        upper_frame,
+        text=ready_numbers_str,
+        font=("Arial", 20),
+        anchor="w",
+        bg="white"
+    ).pack(pady=10, padx=10, fill="x")
 
 # 하단 준비중 영역
 lower_frame = tk.Frame(left_frame, bg="white", relief="solid", borderwidth=1, height=400)
@@ -337,6 +435,7 @@ def place_order():
         cart.clear()
         update_order_display()
         update_pending_display()
+        update_second_display()
     else:
         # 장바구니 비어 있을 때 경고 메시지
         messagebox.showwarning("장바구니 비어 있음", "장바구니가 비어 있습니다. 주문을 추가하세요.")
@@ -404,6 +503,7 @@ def add_to_cart(product_name):
 
 
 update_order_display()
+update_second_display()
 
 root.mainloop()
 

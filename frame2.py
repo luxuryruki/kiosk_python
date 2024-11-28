@@ -49,12 +49,9 @@ tk.Button(
     font=("Arial", 20), 
     bg="#4CAF50", 
     fg="white", 
-    command=process_order()
+    command=process_order
 ).pack(pady=10, padx=20, expand=True)
 
-# 주문 처리 함수
-def process_order():
-    """주문 처리 로직 (추후 구현 예정)"""
-    pass  # 현재는 구현 없음
+
 
 second_window.mainloop()
