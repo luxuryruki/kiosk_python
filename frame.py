@@ -5,7 +5,6 @@ from tkinter import messagebox
 from data_structures.queue import Queue
 from ordersheet import Ordersheet
 
-# 예시 데이터
 ready_list =  Queue()  # 준비완료 리스트
 pending_list = Queue()  # 준비중 리스트
 cart = {} 
@@ -155,9 +154,9 @@ def update_second_display():
 
 
 products = {
-    "도너츠": [("초코 도너츠", 1000, "images/donut1.png"), ("슈가 도너츠", 1000, "images/donut1.png"), ("크림 도너츠", 1000, "images/donut1.png"), ("초코 도너츠", 1000, "images/donut1.png"), ("슈가 도너츠", 1000, "images/donut1.png"), ("크림 도너츠", 1000, "images/donut1.png")],
-    "찐빵": [("팥 찐빵", 1000, "images/donut1.png"), ("야채 찐빵", 1000, "images/donut1.png"), ("고구마 찐빵", 1000, "images/donut1.png")],
-    "음료": [("아메리카노", 1000, "images/donut1.png"), ("라떼", 1000, "images/donut1.png"), ("녹차", 1000, "images/donut1.png")]
+    "도너츠": [("꽈배기", 500, "images/donut1.png"), ("팥 도너츠", 700, "images/bean.png"), ("생 도너츠", 700, "images/plain.png")],
+    "찐빵": [("우유 찐빵", 700, "images/milk.png"), ("보리빵", 700, "images/bori.png")],
+    "음료": [("아메리카노", 1500, "images/americano.png"), ("카페라떼", 2000, "images/latte.png")]
 }
 
 
