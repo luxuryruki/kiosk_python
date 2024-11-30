@@ -19,7 +19,7 @@ class CList:
         if not self.head:
             self.head = new_node
             self.tail = new_node
-            self.head.next_node = self.head  # 원형 연결
+            self.head.next_node = self.head  
             self.head.prev_node = self.head
         else:
             new_node.prev_node = self.tail
@@ -40,7 +40,7 @@ class CList:
             if current.value == value:
                 return current
             current = current.next_node
-            if current == self.head:  # 한 바퀴 돌면 검색 종료
+            if current == self.head:  
                 break
 
         return None 
@@ -54,30 +54,25 @@ class CList:
         current = self.head
         while True:
             if current.value == value:
-                # 노드 삭제
                 if current == self.head and current == self.tail:
-                    # 리스트에 노드가 한 개만 있는 경우
                     self.head = None
                     self.tail = None
                 elif current == self.head:
-                    # 삭제할 노드가 head인 경우
                     self.head = self.head.next_node
                     self.head.prev_node = self.tail
                     self.tail.next_node = self.head
                 elif current == self.tail:
-                    # 삭제할 노드가 tail인 경우
                     self.tail = self.tail.prev_node
                     self.tail.next_node = self.head
                     self.head.prev_node = self.tail
                 else:
-                    # 중간 노드 삭제
                     current.prev_node.next_node = current.next_node
                     current.next_node.prev_node = current.prev_node
                 print(f"CList_Removed: {value}")
                 return
             current = current.next_node
             if current == self.head:
-                # 리스트를 한 바퀴 돌았는데 값이 없음
+               
                 break
         print(f"Value {value} not found in the list.")
 
@@ -92,6 +87,6 @@ class CList:
             while True:
                 values.append(current.value)
                 current = current.next_node
-                if current == self.head:  # 원형 리스트의 끝을 만남
+                if current == self.head:  
                     break
             print(" <-> ".join(map(str, values)))

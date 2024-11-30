@@ -2,12 +2,12 @@ from data_structures.clist import CList
 
 class Queue:
     def __init__(self):
-            self.clist = CList()  # CList를 내부적으로 사용
+            self.clist = CList() 
             self.size = 0
 
     def enqueue(self, value):
         """큐에 요소를 추가"""
-        self.clist.add(value)  # CList의 add 메서드를 사용해 맨 끝에 추가
+        self.clist.add(value)  
         self.size += 1
 
     def dequeue(self):
@@ -15,8 +15,7 @@ class Queue:
         if self.is_empty():
             print("Dequeue from an empty queue")
 
-        # CList의 첫 번째 노드를 가져오고 제거
-        front_value = self.clist.head.value  # head의 값 가져오기
+        front_value = self.clist.head.value 
         self.clist.remove(front_value)
 
         self.size -= 1

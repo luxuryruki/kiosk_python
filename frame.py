@@ -81,7 +81,7 @@ def update_second_display():
     tk.Label(second_left_frame, text="주문 목록", font=("Arial", 20), bg="white").pack(pady=10)
 
     
-    # 주문 목록 표시 (오름차순)
+    # 주문 목록 표시
     if not pending_list.is_empty():
         print(f"Queue size: {pending_list.size}")
     
@@ -91,14 +91,13 @@ def update_second_display():
             order_id = current.value.get_id()
             print(current.value.get_id())
             
-            # 현재 작업 중인 주문 강조
-            if current == pending_list.clist.head:  # 가장 앞의 주문
+            if current == pending_list.clist.head: 
                 tk.Label(
                     second_left_frame,
                     text=f"{order_id}",
-                    font=("Arial", 24, "bold"),  # Bold 처리
+                    font=("Arial", 24, "bold"), 
                     bg="white",
-                    fg="blue",  # 파란색
+                    fg="blue",  
                     anchor="w"
                 ).pack()
             else:
@@ -107,11 +106,11 @@ def update_second_display():
                     text=f"{order_id}",
                     font=("Arial", 24),
                     bg="white",
-                    fg="black",  # 파란색
+                    fg="black", 
                     anchor="w"
                 ).pack()
 
-            current = current.next_node  # 다음 노드로 이동
+            current = current.next_node  
     else:
         tk.Label(second_left_frame, text="대기 중인 주문이 없습니다.", font=("Arial", 16), bg="white").pack(pady=10)
 
@@ -160,14 +159,14 @@ products = {
 }
 
 
-# 왼쪽 준비 영역 (상단: 준비완료, 하단: 준비중)
+# 왼쪽 준비 영역 (
 left_frame = tk.Frame(root, width=300, height=800, bg="white", relief="solid", borderwidth=1)
 left_frame.pack(side="left", fill="y")
-left_frame.pack_propagate(False)  # 프레임 내부 내용에 따라 크기 변경 안 되도록 설정
+left_frame.pack_propagate(False)  
 
 # 상단 준비완료 영역
 upper_frame = tk.Frame(left_frame, bg="white", relief="solid", borderwidth=1, height=400)
-upper_frame.pack(fill="x", side="top")  # 위쪽에 배치
+upper_frame.pack(fill="x", side="top")  
 upper_frame.pack_propagate(False)
 tk.Label(upper_frame, text="준비완료", font=("Arial", 24), width=20, height=2, bg="white").pack(pady=10)
 
@@ -181,8 +180,8 @@ def update_ready_display():
     if not ready_list.is_empty():
         current = ready_list.clist.head
         for _ in range(ready_list.size):
-            ready_numbers.append(current.value.get_id())  # Ordersheet의 order_id 가져오기
-            current = current.next_node  # 다음 노드로 이동
+            ready_numbers.append(current.value.get_id())  
+            current = current.next_node  
 
     # 문자열로 변환하여 표시
     ready_numbers_str = ", ".join(map(str, ready_numbers))
@@ -196,7 +195,7 @@ def update_ready_display():
 
 # 하단 준비중 영역
 lower_frame = tk.Frame(left_frame, bg="white", relief="solid", borderwidth=1, height=400)
-lower_frame.pack(fill="x", side="top")  # 아래쪽에 배치
+lower_frame.pack(fill="x", side="top")  
 lower_frame.pack_propagate(False)
 tk.Label(lower_frame, text="준비중", font=("Arial", 24), width=20, height=2, bg="white").pack(pady=10)
 
@@ -214,20 +213,20 @@ category_frame.columnconfigure(1, weight=1)
 category_frame.columnconfigure(2, weight=1)
 
 # 카테고리 버튼
-category_frame.columnconfigure(0, weight=1)  # 첫 번째 버튼
-category_frame.columnconfigure(1, weight=1)  # 두 번째 버튼
-category_frame.columnconfigure(2, weight=1)  # 세 번째 버튼
+category_frame.columnconfigure(0, weight=1)  
+category_frame.columnconfigure(1, weight=1)  
+category_frame.columnconfigure(2, weight=1)  
 
 # 도너츠 버튼
 tk.Button(
     category_frame,
     text="도너츠",
-    font=("Arial", 24, "bold"),  # 글꼴과 크기 강조
-    width=15,  # 버튼 너비
-    height=2,  # 버튼 높이
-    bg="#FFE4B5",  # 밝은 베이지 색상 배경
-    activebackground="#FFDAB9",  # 활성화 배경 색
-    relief="flat",  # 테두리 스타일
+    font=("Arial", 24, "bold"), 
+    width=15,  
+    height=2, 
+    bg="#FFE4B5", 
+    activebackground="#FFDAB9",  
+    relief="flat",  
     command=lambda: display_products("도너츠")
 ).grid(row=0, column=0, padx=10, pady=10)
 
@@ -238,7 +237,7 @@ tk.Button(
     font=("Arial", 24, "bold"),
     width=15,
     height=2,
-    bg="#FFFACD",  # 밝은 노란색 배경
+    bg="#FFFACD", 
     activebackground="#FAFAD2",
     relief="flat",
     command=lambda: display_products("찐빵")
@@ -251,7 +250,7 @@ tk.Button(
     font=("Arial", 24, "bold"),
     width=15,
     height=2,
-    bg="#E0FFFF",  # 밝은 파란색 배경
+    bg="#E0FFFF",  
     activebackground="#AFEEEE",
     relief="flat",
     command=lambda: display_products("음료")
@@ -262,7 +261,7 @@ product_display = tk.Frame(center_frame, bg="white")
 product_display.pack(fill="both", expand=True)
 
 
-# 오른쪽 주문 내역 및 결제 영역 (절대 크기 설정)
+# 오른쪽 주문 내역 및 결제 영역
 right_frame = tk.Frame(root, width=300, height=800, bg="white", relief="solid", borderwidth=1)
 right_frame.pack(side="right", fill="y")
 right_frame.pack_propagate(False)
@@ -272,7 +271,7 @@ order_list = tk.Frame(right_frame, bg="white")
 order_list.pack(fill="both", expand=True)
 
 # 합계 및 결제 버튼 영역
-total_frame = tk.Frame(right_frame, bg="white", relief="flat")  # flat로 기본 테두리 제거
+total_frame = tk.Frame(right_frame, bg="white", relief="flat") 
 total_frame.pack(side="bottom", fill="x", pady=10)
 
 
@@ -286,15 +285,15 @@ def display_products(category):
         widget.destroy()
 
     # 그리드 정렬을 위한 중앙 설정
-    product_display.columnconfigure(0, weight=1)  # 왼쪽 여백
-    product_display.columnconfigure(1, weight=1)  # 왼쪽 첫 번째 메뉴
-    product_display.columnconfigure(2, weight=1)  # 두 번째 메뉴
-    product_display.columnconfigure(3, weight=1)  # 세 번째 메뉴
-    product_display.columnconfigure(4, weight=1)  # 오른쪽 여백
+    product_display.columnconfigure(0, weight=1)  
+    product_display.columnconfigure(1, weight=1)  
+    product_display.columnconfigure(2, weight=1)  
+    product_display.columnconfigure(3, weight=1)  
+    product_display.columnconfigure(4, weight=1)  
 
     if category in products:
         row = 0
-        col = 1  # 첫 번째 메뉴는 두 번째 컬럼(인덱스 1)에 위치
+        col = 1  
         for product_name, price, img_path in products[category]:
             # 상품 프레임
             frame = tk.Frame(product_display, bg="white", padx=10, pady=10)
@@ -303,9 +302,9 @@ def display_products(category):
             # 이미지 로드
             try:
                 photo = tk.PhotoImage(file=img_path)
-                photo = photo.subsample(3, 3)  # 이미지 크기 조정 (축소)
+                photo = photo.subsample(3, 3)
             except Exception as e:
-                photo = None  # 이미지 로드 실패 시 None 처리
+                photo = None  
 
             # 내부 중앙 정렬을 위한 서브 프레임
             inner_frame = tk.Frame(frame, bg="white")
@@ -314,7 +313,7 @@ def display_products(category):
             # 이미지
             if photo:
                 img_label = tk.Label(inner_frame, image=photo, bg="white")
-                img_label.image = photo  # 이미지 참조 유지
+                img_label.image = photo 
                 img_label.pack(pady=5)
 
             # 가격 표시
@@ -330,9 +329,8 @@ def display_products(category):
                 command=lambda p=product_name: add_to_cart(p)
             ).pack(pady=10)
 
-            # 다음 위치 계산
             col += 1
-            if col > 3:  # 세 번째 메뉴까지 채우면 다음 행으로 이동
+            if col > 3: 
                 col = 1
                 row += 1
 
@@ -346,8 +344,8 @@ def update_order_display():
 
     # 장바구니가 비어 있을 때
     if not cart:
-        spacer = tk.Frame(order_list, height=50, bg="white")  # 빈 공간 추가
-        spacer.pack()  # 상단에 추가로 여백 확보
+        spacer = tk.Frame(order_list, height=50, bg="white")  
+        spacer.pack() 
 
         tk.Label(order_list, text="장바구니가 비어 있습니다.", font=("Arial", 20), bg="white").pack(pady=10)
     
@@ -407,7 +405,7 @@ def update_quantity(product_name, change):
     """상품 수량 변경"""
     if product_name in cart:
         cart[product_name][0] += change
-        if cart[product_name][0] <= 0:  # 수량이 0 이하인 경우 삭제
+        if cart[product_name][0] <= 0:  
             del cart[product_name]
         else:
             cart[product_name][2] = cart[product_name][0] * cart[product_name][1]
@@ -416,27 +414,22 @@ def update_quantity(product_name, change):
 
 def place_order():
     """주문 처리"""
-    global order_number  # 주문 번호를 전역 변수로 사용
+    global order_number 
     new_ordersheet = create_ordersheet_from_cart(order_id=order_number, cart=cart)
-    if cart:  # 장바구니에 상품이 있는 경우에만 처리
-        # 주문 완료 메시지
+    if cart: 
         messagebox.showinfo(
             "주문 완료",
             f"주문이 완료되었습니다!\n주문번호: {order_number}"
         )
 
-        # 주문 번호를 대기 목록에 추가
         pending_list.enqueue(new_ordersheet)
-        # 주문 번호 증가
         order_number += 1
 
-        # 장바구니 초기화 및 UI 업데이트
         cart.clear()
         update_order_display()
         update_pending_display()
         update_second_display()
     else:
-        # 장바구니 비어 있을 때 경고 메시지
         messagebox.showwarning("장바구니 비어 있음", "장바구니가 비어 있습니다. 주문을 추가하세요.")
 
 
@@ -449,52 +442,41 @@ def create_ordersheet_from_cart(order_id, cart):
 
 def update_pending_display():
     """하단 준비 중 영역 UI 업데이트"""
-    # 기존 위젯 삭제
+
     for widget in lower_frame.winfo_children():
         widget.destroy()
 
-    # '준비중' 제목 표시
     tk.Label(lower_frame, text="준비중", font=("Arial", 24), width=20, height=2, bg="white").pack(pady=10)
 
-    # 대기 중인 주문 번호 표시
-    if not pending_list.is_empty():  # 큐가 비어 있지 않을 때
-        # CList를 순회하여 order_id 추출
+    if not pending_list.is_empty():  
         current = pending_list.clist.head
 
-        # current가 없거나 next가 없는 경우 처리하지 않음
         if not current or not current.next_node:
             tk.Label(lower_frame, text="대기 중인 주문이 없습니다.", font=("Arial", 20), bg="white").pack(pady=10)
             return
 
-        # CList 순회
         order_ids = []
         for _ in range(pending_list.size):
-            order_ids.append(current.value.get_id())  # Ordersheet의 get_id 메서드 호출
-            current = current.next_node  # 다음 노드로 이동
+            order_ids.append(current.value.get_id()) 
+            current = current.next_node  
 
-        # 추출한 주문 번호를 화면에 표시
         pending_numbers = ", ".join(map(str, order_ids))
         tk.Label(lower_frame, text=pending_numbers, font=("Arial", 20), anchor="w", bg="white").pack(pady=10, padx=10, fill="x")
     else:
-        # 대기 중인 주문이 없을 때 메시지 표시
         tk.Label(lower_frame, text="대기 중인 주문이 없습니다.", font=("Arial", 20), bg="white").pack(pady=10)
 
 
 def add_to_cart(product_name):
     """상품을 장바구니에 추가"""
-    # products 딕셔너리에서 상품의 가격을 가져옴
+
     for category in products.values():
         for name, price, _ in category:
             if name == product_name:
                 if product_name in cart:
-                    # 수량 증가
                     cart[product_name][0] += 1
-                    # 단가 업데이트 (가격 변동이 있을 수 있으므로)
                     cart[product_name][1] = price
-                    # 총 가격 업데이트
                     cart[product_name][2] = cart[product_name][0] * cart[product_name][1]
                 else:
-                    # 새로운 상품 추가 (수량, 단가, 총 가격)
                     cart[product_name] = [1, price, price]
                 update_order_display()
                 return
